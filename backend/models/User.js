@@ -4,5 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     email: { type: DataTypes.STRING, unique: true },
     password: DataTypes.STRING,
     role: { type: DataTypes.ENUM("admin", "user") },
+    post_id: { type: DataTypes.INTEGER, allowNull: true },
+    status: { type: DataTypes.STRING, defaultValue: "active" },
   });
 };

@@ -3,10 +3,10 @@ import Navbar from "../components/layout/Navbar";
 
 export default function MainLayout({ children }) {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-slate-50">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col bg-gray-100">
+      <div className="flex-1 flex flex-col">
         <Navbar />
         <div className="p-6 overflow-y-auto">{children}</div>
       </div>

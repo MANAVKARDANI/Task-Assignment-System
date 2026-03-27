@@ -14,6 +14,8 @@ app.use("/api/tasks", require("./routes/taskRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/comments", require("./routes/commentRoutes"));
 app.use("/api/notifications", require("./routes/notificationRoutes"));
+app.use("/api/posts", require("./routes/postRoutes"));
+app.use("/api/profile", require("./routes/profileRoutes"));
 
 // Error middleware (last)
 app.use(errorHandler);

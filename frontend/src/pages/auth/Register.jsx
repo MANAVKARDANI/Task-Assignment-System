@@ -1,46 +1,61 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { registerUser } from "../../api/authApi";
 import { useNavigate, Link } from "react-router-dom";
 import { User, Mail, Lock } from "lucide-react";
+import toast from "react-hot-toast";
+import { getPosts } from "../../api/postApi";
 
 export default function Register() {
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
-    role: "user",
+    post_id: "",
   });
 
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getPosts()
+      .then((res) => setPosts(res.data))
+      .catch(() => toast.error("Failed to load posts"));
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    await registerUser(form);
-
-    setLoading(false);
-    navigate("/");
+    try {
+      const payload = { ...form };
+      if (!payload.post_id) delete payload.post_id;
+      await registerUser(payload);
+      toast.success("Account created successfully");
+      navigate("/");
+    } catch (err) {
+      toast.error(err?.response?.data?.msg || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 to-blue-700">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-6">
       <form
-        className="bg-white/90 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-96"
+        className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm w-full max-w-md"
         onSubmit={handleSubmit}
       >
         <h2 className="text-3xl font-bold text-center mb-2">
-          Create Account 🚀
+          Create Account
         </h2>
 
-        <p className="text-center text-gray-500 mb-6 text-sm">
+        <p className="text-center text-slate-500 mb-6 text-sm">
           Start managing tasks like a pro
         </p>
 
         {/* Name */}
-        <div className="flex items-center border rounded-lg px-3 mb-3 bg-gray-50">
-          <User size={18} className="text-gray-400" />
+        <div className="flex items-center border border-slate-200 rounded-lg px-3 mb-3 bg-slate-50">
+          <User size={18} className="text-slate-400" />
           <input
             placeholder="Full Name"
             className="w-full p-2 bg-transparent outline-none"
@@ -49,8 +64,8 @@ export default function Register() {
         </div>
 
         {/* Email */}
-        <div className="flex items-center border rounded-lg px-3 mb-3 bg-gray-50">
-          <Mail size={18} className="text-gray-400" />
+        <div className="flex items-center border border-slate-200 rounded-lg px-3 mb-3 bg-slate-50">
+          <Mail size={18} className="text-slate-400" />
           <input
             placeholder="Email"
             className="w-full p-2 bg-transparent outline-none"
@@ -59,8 +74,8 @@ export default function Register() {
         </div>
 
         {/* Password */}
-        <div className="flex items-center border rounded-lg px-3 mb-3 bg-gray-50">
-          <Lock size={18} className="text-gray-400" />
+        <div className="flex items-center border border-slate-200 rounded-lg px-3 mb-3 bg-slate-50">
+          <Lock size={18} className="text-slate-400" />
           <input
             type="password"
             placeholder="Password"
@@ -69,16 +84,21 @@ export default function Register() {
           />
         </div>
 
-        {/* Role */}
+        {/* Post */}
         <select
-          className="w-full p-2 border rounded mb-4"
-          onChange={(e) => setForm({ ...form, role: e.target.value })}
+          className="w-full p-2 border border-slate-200 rounded mb-4"
+          value={form.post_id}
+          onChange={(e) => setForm({ ...form, post_id: Number(e.target.value) })}
         >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
+          <option value="">Select Post</option>
+          {posts.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.name}
+            </option>
+          ))}
         </select>
 
-        <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg">
+        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg disabled:opacity-60">
           {loading ? "Creating..." : "Register"}
         </button>
 

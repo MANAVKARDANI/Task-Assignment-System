@@ -1,12 +1,14 @@
 import { Bell } from "lucide-react";
 
-export default function NotificationBell() {
+export default function NotificationBell({ unreadCount = 0 }) {
   return (
     <div className="relative cursor-pointer">
-      <Bell />
-      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
-        3
-      </span>
+      <Bell className="text-slate-600" />
+      {unreadCount > 0 && (
+        <span className="absolute -top-2 -right-2 min-w-5 text-center bg-red-500 text-white text-[10px] px-1 rounded-full">
+          {unreadCount > 99 ? "99+" : unreadCount}
+        </span>
+      )}
     </div>
   );
 }
