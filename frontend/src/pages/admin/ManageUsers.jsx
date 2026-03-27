@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getUsers } from "../../api/userApi";
 import MainLayout from "../../layout/MainLayout";
 import { UserRound } from "lucide-react";
@@ -9,21 +9,41 @@ export default function ManageUsers() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setLoading(true);
     getUsers()
       .then((res) => setUsers(res.data))
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  useEffect(() => {
+    const onUsers = () => load();
+    window.addEventListener("users:changed", onUsers);
+    return () => window.removeEventListener("users:changed", onUsers);
+  }, [load]);
+
   return (
     <MainLayout>
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
-          Manage users
-        </h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Overview of team members and roles
-        </p>
+      <div className="mb-8 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+            Manage users
+          </h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Overview of team members and roles
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => navigate("/admin/add-user")}
+          className="rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800"
+        >
+          Add user
+        </button>
       </div>
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
         <div className="overflow-x-auto">

@@ -13,14 +13,14 @@ import {
 
 import {
   ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
+  PieChart,
+  Pie,
+  Cell,
   Tooltip,
-  CartesianGrid,
   Legend,
 } from "recharts";
+
+const MILESTONE_PIE_COLORS = ["#374151", "#d1d5db"];
 
 function StatusBadge({ status }) {
   const badge = useMemo(() => {
@@ -115,13 +115,15 @@ export default function TaskDetails() {
     }
   }, [user, users.length]);
 
-  const chartData = useMemo(() => {
-    const keywords = task?.keywords || [];
-    return keywords.map((k) => ({
-      keyword: k.keyword,
-      completed: k.is_completed ? 1 : 0,
-      pending: k.is_completed ? 0 : 1,
-    }));
+  const milestonePieData = useMemo(() => {
+    const kws = task?.keywords || [];
+    if (!kws.length) return [];
+    const done = kws.filter((k) => k.is_completed).length;
+    const left = kws.length - done;
+    return [
+      { name: "Completed", value: done },
+      { name: "Remaining", value: left },
+    ];
   }, [task]);
 
   const isAdmin = user?.role === "admin";
@@ -245,26 +247,95 @@ export default function TaskDetails() {
             </div>
 
             <div className="card p-5 lg:col-span-2">
-              <h2 className="font-semibold text-slate-800 mb-3">
-                Progress Graph
+              <h2 className="font-semibold text-slate-800 mb-1">
+                Milestone progress
               </h2>
-              <div className="h-72 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="keyword" tick={{ fontSize: 12 }} interval={0} angle={-20} dy={8} />
-                    <YAxis domain={[0, 1]} ticks={[0, 1]} tickFormatter={(v) => (v === 1 ? "Done" : "Pending")} />
-                    <Tooltip />
+              <p className="text-sm text-slate-500 mb-4">
+                {task.keywords?.length
+                  ? `${task.keywords.filter((k) => k.is_completed).length} of ${task.keywords.length} milestones completed`
+                  : "No milestones on this task."}
+              </p>
+
+              {task.keywords?.length > 0 ? (
+                <div className="grid gap-6 md:grid-cols-2">
+                  <div className="h-64 w-full min-h-[220px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={milestonePieData}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={52}
+                          outerRadius={84}
+                          paddingAngle={2}
+                          stroke="#f8fafc"
+                          strokeWidth={2}
+                        >
+                          {milestonePieData.map((entry, i) => (
+                            <Cell
+                              key={entry.name}
+                              fill={MILESTONE_PIE_COLORS[i % MILESTONE_PIE_COLORS.length]}
+                            />
+                          ))}
+                        </Pie>
+                        <Tooltip
+                          formatter={(value) => [`${value} milestone(s)`, ""]}
+                          contentStyle={{
+                            borderRadius: "0.75rem",
+                            border: "1px solid #e5e7eb",
+                            fontSize: "12px",
+                          }}
+                        />
                         <Legend />
-                        <Bar dataKey="completed" fill="#2563eb" radius={[6, 6, 0, 0]} />
-                        <Bar dataKey="pending" fill="#94a3b8" radius={[6, 6, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="mt-4">
-                <div className="w-full bg-slate-200 h-2 rounded-full">
-                  <div className="bg-gray-900 h-2 rounded-full" style={{ width: `${task.progress}%` }} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <div className="max-h-72 space-y-3 overflow-y-auto pr-1">
+                    {task.keywords.map((k) => (
+                      <div key={k.id}>
+                        <div className="mb-1 flex justify-between gap-2 text-xs">
+                          <span
+                            className="truncate font-medium text-slate-800"
+                            title={k.keyword}
+                          >
+                            {k.keyword}
+                          </span>
+                          <span className="shrink-0 text-slate-500">
+                            {k.is_completed ? "Done" : "Pending"}
+                          </span>
+                        </div>
+                        <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+                          <div
+                            className={`h-2 rounded-full transition-all ${
+                              k.is_completed ? "bg-gray-900" : "bg-slate-300"
+                            }`}
+                            style={{ width: k.is_completed ? "100%" : "10%" }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+              ) : null}
+
+              <div className="mt-6 border-t border-slate-100 pt-4">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">
+                  Overall progress
+                </p>
+                <div className="h-2 w-full rounded-full bg-slate-200">
+                  <div
+                    className="h-2 rounded-full bg-gray-900 transition-all"
+                    style={{ width: `${task.progress ?? 0}%` }}
+                  />
+                </div>
+                <p className="mt-1 text-sm text-slate-600">
+                  <span className="font-semibold text-slate-900">
+                    {task.progress ?? 0}%
+                  </span>{" "}
+                  based on milestones
+                </p>
               </div>
             </div>
           </div>

@@ -6,6 +6,7 @@ import Register from "../pages/auth/Register";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AssignTask from "../pages/admin/AssignTask";
 import ManageUsers from "../pages/admin/ManageUsers";
+import AddUser from "../pages/admin/AddUser";
 import AllTasks from "../pages/admin/AllTasks";
 import UserDetails from "../pages/admin/UserDetails";
 import ManagePosts from "../pages/admin/ManagePosts";
@@ -69,6 +70,17 @@ export default function AppRoutes() {
             <PrivateRoute>
               <RoleRoute role="admin">
                 <ManageUsers />
+              </RoleRoute>
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/admin/add-user"
+          element={
+            <PrivateRoute>
+              <RoleRoute role="admin">
+                <AddUser />
               </RoleRoute>
             </PrivateRoute>
           }
