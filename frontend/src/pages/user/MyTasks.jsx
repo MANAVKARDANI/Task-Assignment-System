@@ -60,7 +60,7 @@ export default function MyTasks() {
         },
         { replace: true }
       );
-    }, 500);
+    }, 300);
 
     return () => clearTimeout(t);
   }, [

@@ -43,7 +43,7 @@ export default function Navbar() {
         },
         { replace: true }
       );
-    }, 500);
+    }, 300);
     return () => clearTimeout(t);
   }, [q, assignDate, dueDate, navigate, location.pathname]);
 

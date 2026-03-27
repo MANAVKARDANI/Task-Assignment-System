@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import MainLayout from "../../layout/MainLayout";
 import { getMyProfile, updateMyProfile } from "../../api/profileApi";
+import { changePassword } from "../../api/authApi";
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
@@ -17,6 +18,8 @@ export default function Profile() {
     email: "",
     image: null,
   });
+
+  const [pw, setPw] = useState({ currentPassword: "", newPassword: "" });
 
   const refresh = async () => {
     setLoading(true);
@@ -62,6 +65,21 @@ export default function Profile() {
       await refresh();
     } catch (err) {
       toast.error(err?.response?.data?.msg || "Failed to update profile");
+    }
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    if (!pw.currentPassword || !pw.newPassword) {
+      toast.error("Please enter current and new password");
+      return;
+    }
+    try {
+      await changePassword(pw);
+      toast.success("Password updated");
+      setPw({ currentPassword: "", newPassword: "" });
+    } catch (err) {
+      toast.error(err?.response?.data?.msg || "Failed to update password");
     }
   };
 
@@ -205,6 +223,31 @@ export default function Profile() {
               </div>
             )}
           </form>
+
+          <div className="mt-8 border-t border-slate-200 pt-6">
+            <h2 className="font-semibold text-slate-800 mb-3">Change Password</h2>
+            <form onSubmit={handleChangePassword} className="grid md:grid-cols-2 gap-3">
+              <input
+                type="password"
+                placeholder="Current password"
+                className="w-full p-2 border border-slate-200 rounded-lg bg-white"
+                value={pw.currentPassword}
+                onChange={(e) => setPw((p) => ({ ...p, currentPassword: e.target.value }))}
+              />
+              <input
+                type="password"
+                placeholder="New password"
+                className="w-full p-2 border border-slate-200 rounded-lg bg-white"
+                value={pw.newPassword}
+                onChange={(e) => setPw((p) => ({ ...p, newPassword: e.target.value }))}
+              />
+              <div className="md:col-span-2">
+                <button className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm">
+                  Update Password
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </MainLayout>

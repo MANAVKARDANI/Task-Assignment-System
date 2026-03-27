@@ -21,11 +21,12 @@ export default function Sidebar() {
         <NavLink
           to={user?.role === "admin" ? "/admin" : "/user"}
           className={navClass}
+          end
         >
           <Home size={18} /> Dashboard
         </NavLink>
 
-        <NavLink to="/profile" className={navClass}>
+        <NavLink to="/profile" className={navClass} end>
           <UserRound size={18} /> Profile
         </NavLink>
 

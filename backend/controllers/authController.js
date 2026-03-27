@@ -82,3 +82,25 @@ exports.login = async (req, res) => {
     return res.status(500).json({ msg: "Failed to login" });
   }
 };
+
+exports.changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ msg: "currentPassword and newPassword are required" });
+    }
+
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(404).json({ msg: "User not found" });
+
+    const valid = await bcrypt.compare(currentPassword, user.password);
+    if (!valid) return res.status(400).json({ msg: "Current password is incorrect" });
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    await user.update({ password: hashed });
+
+    return res.json({ msg: "Password updated" });
+  } catch (err) {
+    return res.status(500).json({ msg: "Failed to update password" });
+  }
+};

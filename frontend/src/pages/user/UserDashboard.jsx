@@ -34,6 +34,15 @@ export default function UserDashboard() {
   }, [params]);
 
   useEffect(() => {
+    const handler = () => {
+      getMyTasks(params).then((res) => setTasks(res.data)).catch(() => {});
+      getNotifications().then((res) => setNotifications(res.data)).catch(() => {});
+    };
+    window.addEventListener("tasks:changed", handler);
+    return () => window.removeEventListener("tasks:changed", handler);
+  }, [params]);
+
+  useEffect(() => {
     setLoadingNotifications(true);
     getNotifications()
       .then((res) => setNotifications(res.data))

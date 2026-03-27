@@ -94,6 +94,14 @@ export default function TaskDetails() {
     }
   };
 
+  const notifyTasksChanged = () => {
+    try {
+      window.dispatchEvent(new CustomEvent("tasks:changed"));
+    } catch {
+      // ignore
+    }
+  };
+
   useEffect(() => {
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,6 +141,7 @@ export default function TaskDetails() {
       await updateTaskProgress(id, completedKeywords);
       toast.success("Progress updated");
       await refresh();
+      notifyTasksChanged();
     } catch (err) {
       toast.error(err?.response?.data?.msg || "Failed to update progress");
     }
@@ -152,6 +161,7 @@ export default function TaskDetails() {
       toast.success("Task updated");
       setEditMode(false);
       await refresh();
+      notifyTasksChanged();
     } catch (err) {
       toast.error(err?.response?.data?.msg || "Failed to update task");
     }
@@ -168,6 +178,7 @@ export default function TaskDetails() {
       setCommentText("");
       toast.success("Comment added");
       await refresh();
+      notifyTasksChanged();
     } catch (err) {
       toast.error(err?.response?.data?.msg || "Failed to add comment");
     }
