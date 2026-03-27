@@ -17,43 +17,53 @@ export default function ManageUsers() {
 
   return (
     <MainLayout>
-      <h1 className="text-2xl font-bold mb-4 text-slate-900">Manage Users</h1>
-      <div className="card p-4 overflow-x-auto">
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          Manage users
+        </h1>
+        <p className="mt-1 text-sm text-gray-500">
+          Overview of team members and roles
+        </p>
+      </div>
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="overflow-x-auto">
         {loading ? (
-          <p className="text-slate-500">Loading users...</p>
+          <p className="p-6 text-sm text-gray-500">Loading users…</p>
         ) : (
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[720px] text-sm">
             <thead>
-              <tr className="text-left text-slate-500 border-b border-slate-200">
-                <th className="py-2">Name</th>
-                <th>Email</th>
-                <th>Mobile</th>
-                <th>Post</th>
-                <th>Status</th>
+              <tr className="border-b border-gray-200 bg-gray-50/90 text-left text-xs font-medium uppercase tracking-wide text-gray-500">
+                <th className="px-4 py-3">Name</th>
+                <th className="px-4 py-3">Email</th>
+                <th className="px-4 py-3">Mobile</th>
+                <th className="px-4 py-3">Post</th>
+                <th className="px-4 py-3">Status</th>
               </tr>
             </thead>
             <tbody>
               {users.map((user) => (
                 <tr
                   key={user.id}
-                  className="border-b border-slate-100 cursor-pointer hover:bg-slate-50"
+                  className="cursor-pointer border-b border-gray-100 transition hover:bg-gray-50"
                   onClick={() => navigate(`/admin/users/${user.id}`)}
                 >
-                  <td className="py-3">
+                  <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-gray-100 text-gray-700">
                         <UserRound size={14} />
                       </span>
-                      <span className="font-medium text-slate-700">{user.name}</span>
+                      <span className="font-medium text-gray-900">{user.name}</span>
                     </div>
                   </td>
-                  <td>{user.email}</td>
-                  <td>
-                    {user.Profile?.mobile || "-"}
+                  <td className="px-4 py-3 text-gray-600">{user.email}</td>
+                  <td className="px-4 py-3 text-gray-600">
+                    {user.Profile?.mobile || "—"}
                   </td>
-                  <td>{user.Post?.name || "-"}</td>
-                  <td>
-                    <span className="rounded-full px-2 py-1 text-xs bg-slate-100 text-slate-700">
+                  <td className="px-4 py-3 text-gray-600">
+                    {user.Post?.name || "—"}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="inline-flex rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-200/80">
                       {user.status || "active"}
                     </span>
                   </td>
@@ -62,6 +72,7 @@ export default function ManageUsers() {
             </tbody>
           </table>
         )}
+        </div>
       </div>
     </MainLayout>
   );

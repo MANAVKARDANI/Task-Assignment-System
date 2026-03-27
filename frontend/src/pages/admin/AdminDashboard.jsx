@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { getAllTasks } from "../../api/taskApi";
 import MainLayout from "../../layout/MainLayout";
-import StatsCard from "../../components/dashboard/StatsCard";
 import TaskTable from "../../components/task/TaskTable";
 import ProgressChart from "../../components/dashboard/ProgressChart";
 import TaskPieChart from "../../components/dashboard/TaskPieChart";
@@ -15,13 +14,10 @@ export default function AdminDashboard() {
 
   const params = useMemo(() => {
     const sp = new URLSearchParams(location.search);
-    const q = sp.get("q") || "";
-    const assignDate = sp.get("assignDate") || "";
-    const dueDate = sp.get("dueDate") || "";
     const out = {};
-    if (q.trim()) out.q = q.trim();
-    if (assignDate) out.assignDate = assignDate;
-    if (dueDate) out.dueDate = dueDate;
+    if (sp.get("q")) out.q = sp.get("q");
+    if (sp.get("assignDate")) out.assignDate = sp.get("assignDate");
+    if (sp.get("dueDate")) out.dueDate = sp.get("dueDate");
     return out;
   }, [location.search]);
 
@@ -35,13 +31,16 @@ export default function AdminDashboard() {
   const inProgress = tasks.filter((t) => t.status === "in_progress").length;
   const pending = tasks.filter((t) => t.status === "pending").length;
   const avgProgress = tasks.length
-    ? Math.round(tasks.reduce((sum, t) => sum + (t.progress || 0), 0) / tasks.length)
+    ? Math.round(
+        tasks.reduce((sum, t) => sum + (t.progress || 0), 0) / tasks.length,
+      )
     : 0;
 
   const chartData = tasks.slice(0, 8).map((t) => ({
     name: t.title.length > 12 ? `${t.title.slice(0, 12)}...` : t.title,
     progress: t.progress,
   }));
+
   const pieData = [
     { name: "Pending", value: pending },
     { name: "In Progress", value: inProgress },
@@ -50,37 +49,66 @@ export default function AdminDashboard() {
 
   return (
     <MainLayout>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900">Admin Analytics Dashboard</h1>
-        <p className="text-slate-500">Live insights based on PostgreSQL task records</p>
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          Admin dashboard
+        </h1>
+        <p className="mt-1 text-sm text-gray-500">
+          Overview of tasks and performance
+        </p>
       </div>
-      {/* Stats */}
-      <div className="grid md:grid-cols-4 gap-4 mb-6">
-        <StatsCard title="Total Tasks" value={tasks.length} />
-        <StatsCard title="Completed" value={completed} />
-        <StatsCard title="Pending" value={pending} />
-        <StatsCard title="Avg Progress" value={`${avgProgress}%`} />
+
+      <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {[
+          { label: "Total Tasks", value: tasks.length },
+          { label: "Completed", value: completed },
+          { label: "In Progress", value: inProgress },
+          { label: "Avg Progress", value: `${avgProgress}%` },
+        ].map((item, i) => (
+          <div
+            key={i}
+            className="card-hover rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+          >
+            <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+              {item.label}
+            </p>
+            <p className="mt-1 text-2xl font-semibold tabular-nums text-gray-900">
+              {item.value}
+            </p>
+          </div>
+        ))}
       </div>
 
       {loading ? (
-        <div className="card p-6 text-slate-500">Loading analytics...</div>
+        <div className="rounded-xl border border-gray-200 bg-white p-8 text-sm text-gray-500 shadow-sm">
+          Loading analytics…
+        </div>
       ) : (
-        <div className="space-y-6">
-          <div className="grid lg:grid-cols-2 gap-6">
-            <div className="card p-4">
-              <h2 className="font-semibold mb-3 text-slate-800">Task Progress Analysis</h2>
+        <div className="space-y-8">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="card-hover rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+              <h2 className="mb-4 text-base font-semibold text-gray-900">
+                Task progress
+              </h2>
               <ProgressChart data={chartData} />
             </div>
-            <div className="card p-4">
-              <h2 className="font-semibold mb-3 text-slate-800">Status Distribution</h2>
+
+            <div className="card-hover rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+              <h2 className="mb-4 text-base font-semibold text-gray-900">
+                Status distribution
+              </h2>
               <TaskPieChart data={pieData} />
             </div>
           </div>
-          <div className="grid lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <TaskTable tasks={tasks} />
+
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="card-hover rounded-xl border border-gray-200 bg-white p-5 shadow-sm lg:col-span-2">
+              <TaskTable tasks={tasks} title="Task overview" />
             </div>
-            <ActivityFeed tasks={tasks} />
+
+            <div className="card-hover rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+              <ActivityFeed tasks={tasks} />
+            </div>
           </div>
         </div>
       )}

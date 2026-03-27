@@ -85,26 +85,34 @@ export default function Profile() {
 
   return (
     <MainLayout>
-      <div className="mb-4 flex items-center justify-between gap-3">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Profile</h1>
-          <p className="text-slate-500 text-sm mt-1">View and update your profile</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+            Profile
+          </h1>
+          <p className="mt-1 text-sm text-gray-500">
+            View and update your profile
+          </p>
         </div>
         <button
           type="button"
           onClick={() => setEditing((v) => !v)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm"
+          className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800"
         >
           {editing ? "Close" : "Edit"}
         </button>
       </div>
 
       {loading ? (
-        <div className="card p-6 text-slate-500">Loading profile...</div>
+        <div className="rounded-xl border border-gray-200 bg-white p-6 text-sm text-gray-500 shadow-sm">
+          Loading profile…
+        </div>
       ) : !profile ? (
-        <div className="card p-6 text-slate-500">No profile found</div>
+        <div className="rounded-xl border border-gray-200 bg-white p-6 text-sm text-gray-500 shadow-sm">
+          No profile found
+        </div>
       ) : (
-        <div className="card p-5">
+        <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow duration-200 hover:shadow-md sm:p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
               <div className="flex items-start gap-4">
@@ -112,18 +120,19 @@ export default function Profile() {
                   <img
                     alt="profile"
                     src={`http://localhost:5000/uploads/${profile.image}`}
-                    className="h-14 w-14 rounded-full object-cover border border-slate-200"
+                    className="h-14 w-14 rounded-full border border-gray-200 object-cover"
                   />
                 ) : (
-                  <div className="h-14 w-14 rounded-full bg-slate-100 border border-slate-200" />
+                  <div className="h-14 w-14 rounded-full border border-gray-200 bg-gray-100" />
                 )}
                 <div>
-                  <p className="text-sm text-slate-500">Full name</p>
-                  <p className="font-semibold text-slate-900">
+                  <p className="text-sm text-gray-500">Full name</p>
+                  <p className="font-semibold text-gray-900">
                     {profile.full_name || profile.user?.name || "-"}
                   </p>
-                  <p className="text-sm text-slate-600 mt-1">
-                    <span className="font-medium">Post:</span> {profile.post || "-"}
+                  <p className="mt-1 text-sm text-gray-600">
+                    <span className="font-medium">Post:</span>{" "}
+                    {profile.post || "-"}
                   </p>
                 </div>
               </div>
@@ -131,59 +140,61 @@ export default function Profile() {
 
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="text-sm text-slate-600 font-medium">
+                <label className="text-sm font-medium text-gray-600">
                   First Name
                 </label>
                 <input
                   disabled={!editing}
-                  className="w-full p-2 border border-slate-200 rounded-lg mt-1 bg-white"
+                  className="input-saas mt-1.5 disabled:cursor-not-allowed disabled:bg-gray-50"
                   value={form.first_name}
                   onChange={(e) => setForm({ ...form, first_name: e.target.value })}
                 />
               </div>
               <div>
-                <label className="text-sm text-slate-600 font-medium">
+                <label className="text-sm font-medium text-gray-600">
                   Last Name
                 </label>
                 <input
                   disabled={!editing}
-                  className="w-full p-2 border border-slate-200 rounded-lg mt-1 bg-white"
+                  className="input-saas mt-1.5 disabled:cursor-not-allowed disabled:bg-gray-50"
                   value={form.last_name}
                   onChange={(e) => setForm({ ...form, last_name: e.target.value })}
                 />
               </div>
               <div>
-                <label className="text-sm text-slate-600 font-medium">Full Name</label>
+                <label className="text-sm font-medium text-gray-600">
+                  Full Name
+                </label>
                 <input
                   disabled={!editing}
-                  className="w-full p-2 border border-slate-200 rounded-lg mt-1 bg-white"
+                  className="input-saas mt-1.5 disabled:cursor-not-allowed disabled:bg-gray-50"
                   value={form.full_name}
                   onChange={(e) => setForm({ ...form, full_name: e.target.value })}
                 />
               </div>
               <div>
-                <label className="text-sm text-slate-600 font-medium">Email</label>
+                <label className="text-sm font-medium text-gray-600">Email</label>
                 <input
                   disabled={!editing}
-                  className="w-full p-2 border border-slate-200 rounded-lg mt-1 bg-white"
+                  className="input-saas mt-1.5 disabled:cursor-not-allowed disabled:bg-gray-50"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                 />
               </div>
               <div>
-                <label className="text-sm text-slate-600 font-medium">Mobile</label>
+                <label className="text-sm font-medium text-gray-600">Mobile</label>
                 <input
                   disabled={!editing}
-                  className="w-full p-2 border border-slate-200 rounded-lg mt-1 bg-white"
+                  className="input-saas mt-1.5 disabled:cursor-not-allowed disabled:bg-gray-50"
                   value={form.mobile}
                   onChange={(e) => setForm({ ...form, mobile: e.target.value })}
                 />
               </div>
               <div>
-                <label className="text-sm text-slate-600 font-medium">Address</label>
+                <label className="text-sm font-medium text-gray-600">Address</label>
                 <input
                   disabled={!editing}
-                  className="w-full p-2 border border-slate-200 rounded-lg mt-1 bg-white"
+                  className="input-saas mt-1.5 disabled:cursor-not-allowed disabled:bg-gray-50"
                   value={form.address}
                   onChange={(e) => setForm({ ...form, address: e.target.value })}
                 />
@@ -191,7 +202,9 @@ export default function Profile() {
             </div>
 
             <div>
-              <label className="text-sm text-slate-600 font-medium">Profile Image</label>
+              <label className="text-sm font-medium text-gray-600">
+                Profile Image
+              </label>
               <div className="mt-2 flex items-center gap-4">
                 {editing && (
                   <input
@@ -206,8 +219,11 @@ export default function Profile() {
             </div>
 
             {editing && (
-              <div className="flex gap-3">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="submit"
+                  className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800"
+                >
                   Save
                 </button>
                 <button
@@ -216,7 +232,7 @@ export default function Profile() {
                     setEditing(false);
                     refresh();
                   }}
-                  className="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-sm"
+                  className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm transition hover:bg-gray-50"
                 >
                   Cancel
                 </button>
@@ -224,26 +240,36 @@ export default function Profile() {
             )}
           </form>
 
-          <div className="mt-8 border-t border-slate-200 pt-6">
-            <h2 className="font-semibold text-slate-800 mb-3">Change Password</h2>
-            <form onSubmit={handleChangePassword} className="grid md:grid-cols-2 gap-3">
+          <div className="mt-8 border-t border-gray-200 pt-6">
+            <h2 className="mb-3 font-semibold text-gray-900">Change password</h2>
+            <form
+              onSubmit={handleChangePassword}
+              className="grid gap-3 md:grid-cols-2"
+            >
               <input
                 type="password"
                 placeholder="Current password"
-                className="w-full p-2 border border-slate-200 rounded-lg bg-white"
+                className="input-saas"
                 value={pw.currentPassword}
-                onChange={(e) => setPw((p) => ({ ...p, currentPassword: e.target.value }))}
+                onChange={(e) =>
+                  setPw((p) => ({ ...p, currentPassword: e.target.value }))
+                }
               />
               <input
                 type="password"
                 placeholder="New password"
-                className="w-full p-2 border border-slate-200 rounded-lg bg-white"
+                className="input-saas"
                 value={pw.newPassword}
-                onChange={(e) => setPw((p) => ({ ...p, newPassword: e.target.value }))}
+                onChange={(e) =>
+                  setPw((p) => ({ ...p, newPassword: e.target.value }))
+                }
               />
               <div className="md:col-span-2">
-                <button className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm">
-                  Update Password
+                <button
+                  type="submit"
+                  className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800"
+                >
+                  Update password
                 </button>
               </div>
             </form>

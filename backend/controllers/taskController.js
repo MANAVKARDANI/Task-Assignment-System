@@ -143,7 +143,7 @@ exports.getTasks = async (req, res) => {
 
     const tasks = await Task.findAll({
       where,
-      include: [{ model: User, attributes: ["id", "name", "email"] }],
+      include: [{ model: User, attributes: ["id", "name", "email", "role"] }],
       order: [["createdAt", "DESC"]],
       limit: limit ? Number(limit) : undefined,
     });
@@ -152,8 +152,10 @@ exports.getTasks = async (req, res) => {
     const searchedTasks = qTrim
       ? tasks.filter((t) => {
           const titleMatch = (t.title || "").toLowerCase().includes(qTrim.toLowerCase());
-          const userMatch = (t.User?.name || "").toLowerCase().includes(qTrim.toLowerCase()) ||
-            (t.User?.email || "").toLowerCase().includes(qTrim.toLowerCase());
+          const userMatch =
+            (t.User?.name || "").toLowerCase().includes(qTrim.toLowerCase()) ||
+            (t.User?.email || "").toLowerCase().includes(qTrim.toLowerCase()) ||
+            (t.User?.role || "").toLowerCase().includes(qTrim.toLowerCase());
           return titleMatch || userMatch;
         })
       : tasks;

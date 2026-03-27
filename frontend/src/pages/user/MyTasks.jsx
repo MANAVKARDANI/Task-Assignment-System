@@ -81,26 +81,37 @@ export default function MyTasks() {
 
   return (
     <MainLayout>
-      <h1 className="text-2xl font-bold mb-4 text-slate-900">My Tasks</h1>
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          My tasks
+        </h1>
+        <p className="mt-1 text-sm text-gray-500">
+          Search and filter your assigned work
+        </p>
+      </div>
 
-      <div className="card p-4 mb-5">
-        <div className="grid md:grid-cols-4 gap-3">
+      <div className="mb-6 rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <label className="text-sm text-slate-600 font-medium">Search</label>
+            <label className="mb-1.5 block text-xs font-medium text-gray-600">
+              Search
+            </label>
             <input
               value={qInput}
               onChange={(e) => setQInput(e.target.value)}
               placeholder="Task name"
-              className="w-full p-2 mt-1 border border-slate-200 rounded-lg bg-white"
+              className="input-saas"
             />
           </div>
 
           <div>
-            <label className="text-sm text-slate-600 font-medium">Status</label>
+            <label className="mb-1.5 block text-xs font-medium text-gray-600">
+              Status
+            </label>
             <select
               value={statusInput}
               onChange={(e) => setStatusInput(e.target.value)}
-              className="w-full p-2 mt-1 border border-slate-200 rounded-lg bg-white"
+              className="input-saas"
             >
               <option value="">All</option>
               <option value="pending">Pending</option>
@@ -111,11 +122,13 @@ export default function MyTasks() {
           </div>
 
           <div>
-            <label className="text-sm text-slate-600 font-medium">Priority</label>
+            <label className="mb-1.5 block text-xs font-medium text-gray-600">
+              Priority
+            </label>
             <select
               value={priorityInput}
               onChange={(e) => setPriorityInput(e.target.value)}
-              className="w-full p-2 mt-1 border border-slate-200 rounded-lg bg-white"
+              className="input-saas"
             >
               <option value="">All</option>
               <option value="low">Low</option>
@@ -125,20 +138,22 @@ export default function MyTasks() {
           </div>
 
           <div>
-            <label className="text-sm text-slate-600 font-medium">Due Date</label>
+            <label className="mb-1.5 block text-xs font-medium text-gray-600">
+              Due date
+            </label>
             <input
               type="date"
               value={dueDateInput}
               onChange={(e) => setDueDateInput(e.target.value)}
-              className="w-full p-2 mt-1 border border-slate-200 rounded-lg bg-white"
+              className="input-saas"
             />
           </div>
         </div>
 
-        <div className="flex gap-3 mt-4">
+        <div className="mt-4 flex flex-wrap gap-2">
           <button
             type="button"
-            className="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-sm"
+            className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm transition hover:border-gray-300 hover:bg-gray-50"
             onClick={() => {
               setQInput("");
               setStatusInput("");
@@ -146,16 +161,19 @@ export default function MyTasks() {
               setDueDateInput("");
             }}
           >
-            Reset
+            Reset filters
           </button>
         </div>
       </div>
 
       {loading ? (
-        <div className="card p-6 text-slate-500">
+        <div className="rounded-xl border border-gray-200 bg-white p-6 text-sm text-gray-500 shadow-sm">
           <div className="space-y-3">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-10 rounded-lg bg-slate-100 animate-pulse" />
+              <div
+                key={i}
+                className="h-10 animate-pulse rounded-lg bg-gray-100"
+              />
             ))}
           </div>
         </div>

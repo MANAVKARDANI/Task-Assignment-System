@@ -1,6 +1,6 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
-const COLORS = ["#94a3b8", "#f59e0b", "#10b981"];
+const COLORS = ["#d1d5db", "#9ca3af", "#374151"];
 
 export default function TaskPieChart({ data }) {
   return (

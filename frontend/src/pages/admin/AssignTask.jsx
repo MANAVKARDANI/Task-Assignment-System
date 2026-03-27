@@ -67,25 +67,35 @@ export default function AssignTask() {
 
   return (
     <MainLayout>
-      <h1 className="text-2xl font-bold mb-4 text-slate-900">Assign Task</h1>
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          Assign task
+        </h1>
+        <p className="mt-1 text-sm text-gray-500">
+          Create a task and assign it to a team member
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit} className="card p-6 space-y-4 max-w-2xl">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-2xl space-y-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow duration-200 hover:shadow-md"
+      >
         <input
           placeholder="Title"
-          className="w-full p-2 border border-slate-200 rounded-lg"
+          className="input-saas"
           value={form.title}
           onChange={(e) => setForm({ ...form, title: e.target.value })}
         />
 
         <textarea
           placeholder="Description"
-          className="w-full p-2 border border-slate-200 rounded-lg"
+          className="input-saas min-h-[100px] resize-y"
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
         />
 
         <select
-          className="w-full p-2 border border-slate-200 rounded-lg"
+          className="input-saas"
           value={form.assigned_to}
           onChange={(e) => setForm({ ...form, assigned_to: e.target.value })}
         >
@@ -99,20 +109,20 @@ export default function AssignTask() {
 
         <input
           type="date"
-          className="w-full p-2 border border-slate-200 rounded-lg"
+          className="input-saas"
           value={form.deadline}
           onChange={(e) => setForm({ ...form, deadline: e.target.value })}
         />
 
         <input
           placeholder="Milestones/Keywords (comma separated)"
-          className="w-full p-2 border border-slate-200 rounded-lg"
+          className="input-saas"
           value={form.keywordsInput}
           onChange={(e) => setForm({ ...form, keywordsInput: e.target.value })}
         />
 
         <select
-          className="w-full p-2 border border-slate-200 rounded-lg"
+          className="input-saas"
           value={form.priority}
           onChange={(e) => setForm({ ...form, priority: e.target.value })}
         >
@@ -121,8 +131,11 @@ export default function AssignTask() {
           <option value="high">High</option>
         </select>
 
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-          Assign Task
+        <button
+          type="submit"
+          className="rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800"
+        >
+          Assign task
         </button>
       </form>
     </MainLayout>

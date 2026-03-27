@@ -263,7 +263,7 @@ export default function TaskDetails() {
               </div>
               <div className="mt-4">
                 <div className="w-full bg-slate-200 h-2 rounded-full">
-                  <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${task.progress}%` }} />
+                  <div className="bg-gray-900 h-2 rounded-full" style={{ width: `${task.progress}%` }} />
                 </div>
               </div>
             </div>
@@ -277,7 +277,7 @@ export default function TaskDetails() {
                 <button
                   type="button"
                   onClick={handleUpdateProgress}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm"
+                  className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm"
                 >
                   Update Progress
                 </button>
@@ -393,7 +393,7 @@ export default function TaskDetails() {
                   <div className="flex gap-3">
                     <button
                       type="submit"
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm"
+                      className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm"
                     >
                       Save Changes
                     </button>
@@ -423,7 +423,7 @@ export default function TaskDetails() {
               />
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm"
+                className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm"
               >
                 Add Comment
               </button>
@@ -460,7 +460,7 @@ export default function TaskDetails() {
                     <div
                       className={`mt-1 h-3 w-3 rounded-full ${
                         item.type === "assigned"
-                          ? "bg-blue-600"
+                          ? "bg-gray-900"
                           : item.type === "progress"
                             ? "bg-green-600"
                             : item.type === "comment"

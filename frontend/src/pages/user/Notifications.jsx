@@ -36,51 +36,64 @@ export default function Notifications() {
 
   return (
     <MainLayout>
-      <div className="mb-4">
-        <h1 className="text-2xl font-bold text-slate-900">Notifications</h1>
-        <p className="text-slate-500 text-sm mt-1">Your latest updates and history</p>
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          Notifications
+        </h1>
+        <p className="mt-1 text-sm text-gray-500">
+          Your latest updates and history
+        </p>
       </div>
 
       {loading ? (
-        <div className="card p-6 text-slate-500">
+        <div className="rounded-xl border border-gray-200 bg-white p-6 text-sm text-gray-500 shadow-sm">
           <div className="space-y-3">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-12 rounded-lg bg-slate-100 animate-pulse" />
+              <div
+                key={i}
+                className="h-12 animate-pulse rounded-lg bg-gray-100"
+              />
             ))}
           </div>
         </div>
       ) : items.length === 0 ? (
-        <div className="card p-6 text-slate-500">No notifications.</div>
+        <div className="rounded-xl border border-gray-200 bg-white p-6 text-sm text-gray-500 shadow-sm">
+          No notifications.
+        </div>
       ) : (
-        <div className="card p-4 overflow-x-auto">
-          <table className="w-full text-sm">
+        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[520px] text-sm">
             <thead>
-              <tr className="text-left border-b border-slate-200 text-slate-500">
-                <th className="py-2">Message</th>
-                <th className="py-2">Task</th>
-                <th className="py-2">Time</th>
+              <tr className="border-b border-gray-200 bg-gray-50/90 text-left text-xs font-medium uppercase tracking-wide text-gray-500">
+                <th className="px-4 py-3">Message</th>
+                <th className="px-4 py-3">Task</th>
+                <th className="px-4 py-3">Time</th>
               </tr>
             </thead>
             <tbody>
               {items.map((n) => (
                 <tr
                   key={n.id}
-                  className={`border-b border-slate-100 hover:bg-slate-50 cursor-pointer ${
-                    n.is_read ? "" : "bg-blue-50/50"
+                  className={`cursor-pointer border-b border-gray-100 transition hover:bg-gray-50 ${
+                    n.is_read ? "" : "bg-gray-50/90"
                   }`}
                   onClick={() => handleOpenTask(n)}
                 >
-                  <td className="py-3">
-                    <div className="font-medium text-slate-900">{n.message}</div>
+                  <td className="px-4 py-3">
+                    <div className="font-medium text-gray-900">{n.message}</div>
                   </td>
-                  <td className="py-3 text-slate-600">{n.task_id ? `#${n.task_id}` : "-"}</td>
-                  <td className="py-3 text-slate-500">
+                  <td className="px-4 py-3 text-gray-600">
+                    {n.task_id ? `#${n.task_id}` : "—"}
+                  </td>
+                  <td className="px-4 py-3 text-gray-500">
                     {n.createdAt ? new Date(n.createdAt).toLocaleString() : "-"}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
     </MainLayout>

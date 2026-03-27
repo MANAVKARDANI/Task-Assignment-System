@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { loginUser } from "../../api/authApi";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function Login() {
@@ -13,6 +13,7 @@ export default function Login() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -37,68 +38,98 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-6">
-      {/* Card */}
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm w-full max-w-md"
-      >
-        {/* Title */}
-        <h2 className="text-3xl font-bold text-center mb-2 text-slate-800">
-          Welcome Back
-        </h2>
-        <p className="text-center text-slate-500 mb-6 text-sm">
-          Login to manage your tasks efficiently
-        </p>
-
-        {/* Error */}
-        {error && (
-          <div className="bg-red-100 text-red-700 p-2 rounded mb-4 text-sm">
-            {error}
-          </div>
-        )}
-
-        {/* Email */}
-        <div className="flex items-center border border-slate-200 rounded-lg px-3 mb-4 bg-slate-50">
-          <Mail size={18} className="text-slate-400" />
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full p-2 bg-transparent outline-none"
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-          />
+    <div className="flex min-h-screen items-center justify-center bg-white px-4 py-12">
+      <div className="w-full max-w-[400px]">
+        <div className="mb-8 text-center">
+          <h1 className="text-xl font-semibold tracking-tight text-gray-900">
+            Task System
+          </h1>
+          <p className="mt-1 text-sm text-gray-500">Sign in to your workspace</p>
         </div>
 
-        {/* Password */}
-        <div className="flex items-center border border-slate-200 rounded-lg px-3 mb-4 bg-slate-50">
-          <Lock size={18} className="text-slate-400" />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-2 bg-transparent outline-none"
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-          />
-        </div>
-
-        {/* Button */}
-        <button
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2 rounded-lg font-semibold disabled:opacity-60"
+        <form
+          onSubmit={handleSubmit}
+          className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm transition-shadow duration-200 hover:shadow-md"
         >
-          {loading ? "Logging in..." : "Login"}
-        </button>
+          <h2 className="text-center text-lg font-semibold text-gray-900">
+            Sign in
+          </h2>
+          <p className="mt-1 text-center text-sm text-gray-500">
+            Use your work email and password
+          </p>
 
-        {/* Footer */}
-        <p className="text-sm mt-5 text-center text-slate-600">
-          Don’t have an account?{" "}
-          <Link
-            to="/register"
-            className="text-blue-600 font-semibold hover:underline"
+          {error && (
+            <div
+              className="mt-6 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-800"
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
+
+          <div className="mt-6 space-y-4">
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-gray-600">
+                Email
+              </label>
+              <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 transition focus-within:border-gray-300 focus-within:ring-2 focus-within:ring-gray-100">
+                <Mail size={16} className="shrink-0 text-gray-400" />
+                <input
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@company.com"
+                  className="input-saas border-0 bg-transparent px-0 py-2.5 shadow-none focus:ring-0"
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-gray-600">
+                Password
+              </label>
+              <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 transition focus-within:border-gray-300 focus-within:ring-2 focus-within:ring-gray-100">
+                <Lock size={16} className="shrink-0 text-gray-400" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  className="input-saas min-w-0 flex-1 border-0 bg-transparent px-0 py-2.5 shadow-none focus:ring-0"
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="shrink-0 rounded p-1 text-gray-400 transition hover:bg-gray-100 hover:text-gray-600"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="mt-8 w-full rounded-lg bg-gray-900 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 disabled:opacity-50"
           >
-            Register
-          </Link>
-        </p>
-      </form>
+            {loading ? "Signing in…" : "Sign in"}
+          </button>
+
+          <p className="mt-6 text-center text-sm text-gray-600">
+            Don&apos;t have an account?{" "}
+            <Link
+              to="/register"
+              className="font-medium text-gray-900 underline-offset-4 hover:underline"
+            >
+              Create one
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

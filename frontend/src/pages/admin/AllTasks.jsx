@@ -29,12 +29,18 @@ export default function AllTasks() {
 
   return (
     <MainLayout>
-      <div className="mb-4">
-        <h1 className="text-2xl font-bold text-slate-900">All Tasks</h1>
-        <p className="text-slate-500 text-sm mt-1">Admin view of every assigned task</p>
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          All tasks
+        </h1>
+        <p className="mt-1 text-sm text-gray-500">
+          Admin view of every assigned task
+        </p>
       </div>
       {loading ? (
-        <div className="card p-6 text-slate-500">Loading tasks...</div>
+        <div className="rounded-xl border border-gray-200 bg-white p-6 text-sm text-gray-500 shadow-sm">
+          Loading tasks…
+        </div>
       ) : (
         <TaskTable tasks={tasks} />
       )}
