@@ -23,6 +23,10 @@ export default function AssignTask() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.title.trim()) {
+      toast.error("Please enter Task Title");
+      return;
+    }
     if (!form.assigned_to) {
       toast.error("Please select a user");
       return;
@@ -45,16 +49,20 @@ export default function AssignTask() {
       keywords,
     };
 
-    await createTask(payload);
-    toast.success("Task assigned successfully");
-    setForm({
-      title: "",
-      description: "",
-      assigned_to: "",
-      deadline: "",
-      priority: "medium",
-      keywordsInput: "",
-    });
+    try {
+      await createTask(payload);
+      toast.success("Task assigned successfully");
+      setForm({
+        title: "",
+        description: "",
+        assigned_to: "",
+        deadline: "",
+        priority: "medium",
+        keywordsInput: "",
+      });
+    } catch (err) {
+      toast.error(err?.response?.data?.msg || "Failed to assign task");
+    }
   };
 
   return (
